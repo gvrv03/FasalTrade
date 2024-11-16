@@ -1,4 +1,5 @@
 "use client";
+import Navbar from "@/components/Utility/Navbar";
 import { useAppStore } from "@/Context/UseStoreContext";
 import GlobalLayout from "@/Layout/GlobalLayout";
 import { useRouter } from "next/navigation";
@@ -8,7 +9,9 @@ const AuthLayout = ({ children }) => {
   const Router = useRouter()
   const { userDetails } = useAppStore();
   if (!userDetails.isLogin) {
-    return <GlobalLayout>{children}</GlobalLayout>;
+    return <GlobalLayout>
+      
+      <Navbar/>{children}</GlobalLayout>;
   } else {
     return <GlobalLayout>Already Login
 

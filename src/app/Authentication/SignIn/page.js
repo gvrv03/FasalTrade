@@ -8,7 +8,7 @@ const Authentication = () => {
 
   return (
     <>
-      <div className="flex gap-20">
+      <div className="flex gap-10 md:gap-20 md:flex-row flex-col ">
         <div className="w-full">
           <img
             className="w-full"

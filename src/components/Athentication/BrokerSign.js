@@ -23,7 +23,7 @@ const BrokerSign = ({ setisLoginState }) => {
   return (
     <form onSubmit={handleSubmit} className="flex gap-5 flex-col w-full ">
       <div>
-        <h2 className="text-xl font-semibold">Broker Sign</h2>
+        <h2 className="text-xl font-semibold">Broker SignIn</h2>
       </div>{" "}
       <div className="border flex gap-5 items-center  rounded-md  border-gray-200 ">
         <i className="uil uil-user-plus bg-gray-100 px-4 py-3" />
