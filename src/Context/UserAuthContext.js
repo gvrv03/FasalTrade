@@ -8,7 +8,6 @@ import {
   createUser,
   fetchUsersAPI,
   SignIn,
-  UpdateUser,
 } from "@/API/Authentication/Auth";
 import { toast } from "react-hot-toast";
 import { useAppStore } from "./UseStoreContext";

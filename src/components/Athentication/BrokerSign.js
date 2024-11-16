@@ -58,7 +58,7 @@ const BrokerSign = ({ setisLoginState }) => {
       </div>
       <PrimaryButton name="Sign In" style="px-5 py-3" loading={loading} />
       <div className="text-gray-500 text-center">
-        If you Don't have an account ?{" "}
+        If you Dont have an account ?{" "}
         <button
           className="text-blue-800 font-semibold"
           onClick={() => {
