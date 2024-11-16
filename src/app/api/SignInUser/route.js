@@ -7,9 +7,9 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const Data = await request.json();
-    const { email, password } = Data;
+    const { email, password, role } = Data;
 
-    const findUser = await User.findOne({ email });
+    const findUser = await User.findOne({ email, role });
 
     if (!findUser) {
       throw new Error("User not Found");
@@ -19,7 +19,13 @@ export async function POST(request) {
     if (checkPassword) {
       return NextResponse.json({
         isSuccess: true,
-        userExist: true,
+        userExist: false,
+        UserName: findUser.name,
+        UserID: findUser._id,
+        UserRole: findUser.role,
+        UserPhone: findUser.phoneNo,
+        UserEmail: findUser.email,
+        UserGender: findUser.gender,
         message: "Login Success",
         token: genToken(findUser?._id),
       });

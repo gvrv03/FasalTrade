@@ -11,34 +11,34 @@ import RootAuth from "@/Middleware/RootAuth";
 export async function POST(request) {
   try {
     const Data = await request.json();
-    const { phoneNo, hash, OTP, userData, password, role } = Data;
-    const checkOTP = await bcrypt.compare(OTP.toString(), hash);
-    const userRole = await bcrypt.hash(role ? role : "user", saltRounds);
+    const { phoneNo, userData, password, role } = Data;
     const hashPassword = await bcrypt.hash(password, saltRounds);
     console.log(Data);
 
-    if (checkOTP) {
-      const userAdd = await User.create({
-        image:
-          userData.gender === "male"
-            ? "/img/maleUser.svg"
-            : "/img/femaleUser.svg",
-        phoneNo,
-        ...userData,
-        role: userRole,
-        password: hashPassword,
-      });
-      console.log(userAdd);
+    const userAdd = await User.create({
+      image:
+        userData.gender === "male"
+          ? "/img/maleUser.svg"
+          : "/img/femaleUser.svg",
+      phoneNo,
+      ...userData,
+      role,
+      password: hashPassword,
+    });
+    console.log(userAdd);
 
-      return NextResponse.json({
-        isSuccess: true,
-        userExist: false,
-        message: "Register Success",
-        token: genToken(userAdd?._id),
-      });
-    }
-
-    throw new Error("Invalid OTP");
+    return NextResponse.json({
+      isSuccess: true,
+      userExist: false,
+      UserName: userAdd.name,
+      UserID: userAdd._id,
+      UserRole: userAdd.role,
+      UserPhone: userAdd.phoneNo,
+      UserEmail: userAdd.email,
+      UserGender: userAdd.gender,
+      message: "Register Success",
+      token: genToken(userAdd?._id),
+    });
   } catch (error) {
     return NextResponse.json(
       {
@@ -87,27 +87,17 @@ export const PUT = Authentication(async (req, userid) => {
   }
 });
 
-export const GET = RootAuth(async (request) => {
+export const GET = async (request) => {
   try {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.search);
     const page = searchParams.get("page"); // Retrieves the value of the 'page' parameter
-    const limit = searchParams.get("limit"); // Retrieves the value of the 'limit' parameter
-    const query = searchParams.get("query"); // Retrieves the value of the 'query' parameter  Ex : ?query={"_id":"649ec1dc0227a5b8da286425"}
-
-    const skipCount = (page - 1) * limit;
-    const usersCount = await User.countDocuments(); // Get the total count of blogs
-    const totalPages = Math.ceil(usersCount / limit); // Calculate the total number of pages
-    const users = await User.find(JSON.parse(query))
-      .sort({ createdAt: -1 })
-      .skip(skipCount)
-      .limit(limit);
+    const users = await User.find();
+    console.log(users);
 
     return NextResponse.json({
       isSuccess: true,
       users,
-      totalPages,
-      usersCount,
     });
   } catch (error) {
     return NextResponse.json(
@@ -122,7 +112,7 @@ export const GET = RootAuth(async (request) => {
       }
     );
   }
-});
+};
 
 const genToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "2160h" });

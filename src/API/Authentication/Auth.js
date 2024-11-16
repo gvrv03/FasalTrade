@@ -12,60 +12,16 @@ import {
 //------------------Fetch Users------------------
 export const fetchUsersAPI = async (data) => {
   const page = data?.page ? data?.page : 1;
-  const limit = data?.limit ? data?.limit : 10;
-  const queryObj = data?.queryObj ? data?.queryObj : {};
-  const headers = {
-    Authorization: "Bearer " + localStorage.getItem("token"),
-  };
-  const url =
-    getUsersURL +
-    `?page=${page}&limit=${limit}&query=${JSON.stringify(queryObj)}`;
-  const res = await axios.get(url, { headers });
-  return await res?.data;
-};
 
-//------------------Send Via Fast 2 SMS------------------
-export const Fast2SMSSend = async (phoneNo, OTP) => {
-  const url = Fast2SMSURL;
-  const data = {
-    variables_values: OTP,
-    route: "otp",
-    numbers: phoneNo,
-  };
-  const headers = {
-    authorization: process.env.FAST2SMSAPI,
-    "Content-Type": "application/json",
-  };
-  const res = await fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: JSON.stringify(data),
-  });
-  const result = await res.json();
-  return result;
-};
-
-//------------------Send Via API------------------
-export const SendSMSToUser = async (number) => {
-  const url = SendSMSToUserURL;
-  const res = await axios.post(url, { phoneNo: number });
+  const url = getUsersURL + `?page=${page}`;
+  const res = await axios.get(url);
   return await res?.data;
 };
 
 //------------------Sign in User------------------
-export const SignIn = async (email, password) => {
+export const SignIn = async (email, password,role) => {
   const url = signInUserURL;
-  const res = await axios.post(url, { email, password });
-  return await res?.data;
-};
-
-//------------------Update User------------------
-export const UpdateUser = async (userData) => {
-  const url = RegisterUserURL;
-  const headers = {
-    Authorization: "Bearer " + localStorage.getItem("token"),
-  };
-  const res = await axios.put(url, { userData }, { headers });
+  const res = await axios.post(url, { email, password,role });
   return await res?.data;
 };
 
@@ -77,14 +33,13 @@ export const checkUserExists = async (number, email) => {
 };
 
 //------------------Create new User------------------
-export const createUser = async (number, hash, OTP, userData, password) => {
+export const createUser = async (number, userData, password, role) => {
   const url = RegisterUserURL;
   const dataUser = {
     phoneNo: number,
-    hash: hash,
-    OTP: OTP,
     userData: userData,
     password: password,
+    role: role,
   };
   const res = await axios.post(url, dataUser);
   return await res?.data;

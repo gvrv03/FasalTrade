@@ -22,66 +22,23 @@ function MyAccountLayout({ window, children }) {
   const [openDashboard, setOpenDashboard] = useState(false);
 
   // Check if user is an admin
-  const isAdmin = userDetails?.isRoot || userDetails?.isAdmin;
-  
+
   const drawer = (
-    <div className="mt-5 text-sm">
-      {UserAccountNav.map((item, index) => {
-        // Only show Dashboard to admins
-        if (item.name === "Dashboard" && !isAdmin) {
-          return null; // Hide Dashboard if user is not admin
-        }
+    <div className="p-5 flex flex-col gap-5 ">
+      <Link href="/MyAccount/Profile" className={`w-full `}>
+        Profile
+      </Link>
 
-        return (
-          <div key={index}>
-            <button
-              className={`${
-                pathname == item?.location && "bg-blue-50 font-semibold"
-              }
-              text-left cursor-pointer text-black hover:text-black hover:no-underline py-2 px-5 hover:bg-blue-50 hover:font-semibold hover:my-2 transition-all delay-75 flex gap-5 w-full`}
-              onClick={() => {
-                if (item.name === "Dashboard") {
-                  setOpenDashboard(!openDashboard);
-                } else {
-                  router.push(item?.location);
-                }
-              }}
-            >
-              <i className={`${item.icon}`} />
-              <span>{item.name}</span>
-
-              {/* Arrow Icon that toggles based on openDashboard */}
-              {item.name === "Dashboard" && (
-                <i
-                  className={`ml-auto transition-transform ${
-                    openDashboard ? "rotate-180" : "rotate-0"
-                  }`}
-                >
-                  ▼ {/* You can use a different arrow icon here */}
-                </i>
-              )}
-            </button>
-
-            {item.name === "Dashboard" && openDashboard && (
-              <div className="ml-5 text-xs">
-                {item.subItems.map((subItem, subIndex) => (
-                  <Link
-                    className={`${
-                      pathname == subItem?.location && "bg-blue-50 font-semibold"
-                    }
-                    text-left text-black hover:text-black hover:no-underline py-2 px-5 hover:bg-blue-50 hover:font-semibold hover:my-2 transition-all delay-75 flex gap-5 w-full`}
-                    key={subIndex}
-                    href={subItem?.location}
-                  >
-                    <i className={`${subItem.icon}`} />
-                    <span>{subItem.name}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
+      {userDetails.UserRole === "FARMERUSER" && (
+        <Link href="/MyAccount/Farmer/Brokers" className={`w-full `}>
+          Brokers
+        </Link>
+      )}
+      {userDetails.UserRole === "BROKERUSER" && (
+        <Link href="/MyAccount/Broker/Farmers" className={`w-full `}>
+          Farmers
+        </Link>
+      )}
     </div>
   );
 
@@ -125,7 +82,7 @@ function MyAccountLayout({ window, children }) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar/>
+        <Toolbar />
         {children}
       </Box>
     </Box>

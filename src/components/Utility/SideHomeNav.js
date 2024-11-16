@@ -10,6 +10,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import TopNav from '@/SampleData/TopNav';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function SideHomeNav() {
   const [open, setOpen] = React.useState(false);
@@ -17,34 +20,28 @@ export default function SideHomeNav() {
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+  const pathName = usePathname();
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+      <div className="flex  justify-end w-full  gap-5">
+        
+      <div className="container items-center gap-5 p-5 justify-end md:flex  m-auto">
+        {TopNav.map((text, index) => (
+          <Link
+            className={`  ${
+              pathName.substring(0, 5) === text.location.substring(0, 5)
+                ? " font-bold   pColor   "
+                : ""
+            }  text-gray-500 hover:no-underline text-left  font-semibold py-2 flex gap-2 items-center   hover:font-semibold  transition-all delay-75 ease-linear`}
+            key={index}
+            href={text.location}
+          >
+            <span className=" font-sans"> {text.name}</span>{" "}
+          </Link>
         ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      </div>
+    </div>
     </Box>
   );
 

@@ -6,7 +6,6 @@ import { toast } from "react-hot-toast";
 
 const useStoreContext = createContext();
 export function UseStoreContextProvider({ children }) {
-
   //----------------------------UserDetail State //----------------------------
   const [userDetails, setuserDetails] = useState({});
 
@@ -35,7 +34,6 @@ export function UseStoreContextProvider({ children }) {
     AppLogo:
       "https://play-lh.googleusercontent.com/FLoXQYURgVleY1gmvKqfQednzHzhIEkdfM3HBi9AdJwPX54YuGb5uFnDXKCiIMYL0Ds=w240-h480-rw",
   });
-
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {

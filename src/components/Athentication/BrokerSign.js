@@ -1,13 +1,15 @@
+"use client";
 import { useUserAuth } from "@/Context/UserAuthContext";
 import React, { useState } from "react";
 import { PrimaryButton } from "../Utility/ButtonsAll";
+import { useRouter } from "next/navigation";
 
-const SignIn = ({ setisLoginState }) => {
+const BrokerSign = ({ setisLoginState }) => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [loading, setloading] = useState(false);
   const { signInUser } = useUserAuth();
-
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setloading(true);
@@ -15,11 +17,14 @@ const SignIn = ({ setisLoginState }) => {
       toast.error("Fill the Fields");
       return setloading(false);
     }
-    await signInUser(email, password);
+    await signInUser(email, password,"BROKERUSER");
     return setloading(false);
   };
   return (
     <form onSubmit={handleSubmit} className="flex gap-5 flex-col w-full ">
+      <div>
+        <h2 className="text-xl font-semibold">Broker Sign</h2>
+      </div>{" "}
       <div className="border flex gap-5 items-center  rounded-md  border-gray-200 ">
         <i className="uil uil-user-plus bg-gray-100 px-4 py-3" />
         <input
@@ -52,12 +57,12 @@ const SignIn = ({ setisLoginState }) => {
         Forgot Password ?
       </div>
       <PrimaryButton name="Sign In" style="px-5 py-3" loading={loading} />
-      <div className="text-gray-500 text-center" >
+      <div className="text-gray-500 text-center">
         If you Don't have an account ?{" "}
         <button
-        className="text-blue-800 font-semibold"
+          className="text-blue-800 font-semibold"
           onClick={() => {
-            setisLoginState(false);
+            router.push("/Authentication/Registration");
           }}
         >
           Create an Account
@@ -67,4 +72,4 @@ const SignIn = ({ setisLoginState }) => {
   );
 };
 
-export default SignIn;
+export default BrokerSign;

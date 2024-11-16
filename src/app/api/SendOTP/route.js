@@ -1,3 +1,4 @@
+
 import { Fast2SMSSend } from "@/API/Authentication/Auth";
 import initDB from "@/Helpers/initDB";
 import User from "@/Modal/User";
@@ -18,9 +19,9 @@ export async function POST(request) {
 
     const userExist = await User.findOne({ phoneNo });
     const hashedOTP = await bcrypt.hash(OTP.toString(), saltRounds);
-    const result = await Fast2SMSSend(phoneNo, OTP.toString());
     console.log("OTP is: ", OTP);
     console.log("hash OTP :" + hashedOTP);
+    const result = await Fast2SMSSend(phoneNo, OTP.toString());
     if (result.return) {
       return NextResponse.json({
         userExist: userExist ? true : false,

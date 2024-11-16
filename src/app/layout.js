@@ -1,13 +1,12 @@
 import Navbar from "@/components/Utility/Navbar";
 import "./globals.css";
 import { UseStoreContextProvider } from "@/Context/UseStoreContext";
-import RenderAllModal from "@/components/ModalUI/RenderAllModal";
 import { UserAuthContexProvider } from "@/Context/UserAuthContext";
 import { Toaster } from "react-hot-toast";
 
 export const metadata = {
-  title: "SIH 2024 ",
-  description: "Official Website of DRDO Interview ",
+  title: "FasalTrade",
+  description: "FasalTrade ",
 };
 
 export default function RootLayout({ children }) {
@@ -22,8 +21,7 @@ export default function RootLayout({ children }) {
       <body className="text-sm md:text-base">
         <UseStoreContextProvider>
           <UserAuthContexProvider>
-            <Toaster  />
-            <RenderAllModal />
+            <Toaster />
             {children}
           </UserAuthContexProvider>
         </UseStoreContextProvider>

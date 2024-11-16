@@ -1,19 +1,14 @@
 import React, { useState } from "react";
-import { PrimaryButton } from "../Utility/ButtonsAll";
 import { useUserAuth } from "@/Context/UserAuthContext";
+import { PrimaryButton } from "../Utility/ButtonsAll";
+import { useRouter } from "next/navigation";
 
-const Registration = ({ setisLoginState }) => {
-  const [userOTP, setuserOTP] = useState("");
+const FarmerRegistration = () => {
   const [loading, setloading] = useState(false);
   const [phoneNo, setphoneNo] = useState("");
-
+  const router = useRouter();
   const {
-    otpSend,
-    isUserExist,
     createNewUser,
-    timer,
-    isTimerRunning,
-    resendOTP,
   } = useUserAuth();
   const [userData, setuserData] = useState({
     gender: "male",
@@ -21,9 +16,7 @@ const Registration = ({ setisLoginState }) => {
     email: "",
     dob: "",
   });
-
   const [password, setpassword] = useState("");
-
   function onChange(e) {
     setuserData({
       ...userData,
@@ -31,34 +24,22 @@ const Registration = ({ setisLoginState }) => {
     });
   }
 
-  const sendOTPtoUser = async (e) => {
+  const CreateUser = async (e) => {
     e.preventDefault();
     setloading(true);
-    if (phoneNo.length < 9) {
-      toast.error("Enter the number");
-      return setloading(false);
-    }
-    await isUserExist(phoneNo, userData.email);
-    return setloading(false);
-  };
-
-  const verifyOTP = async (e) => {
-    e.preventDefault();
-    setloading(true);
-    if (!userOTP) {
-      toast.error("Enter the OTP");
-      return setloading(false);
-    }
-    await createNewUser(parseInt(userOTP), phoneNo, userData, password);
+    await createNewUser(phoneNo, userData, password, "FARMERUSER");
     return setloading(false);
   };
 
   return (
     <form
-      onSubmit={!otpSend ? sendOTPtoUser : verifyOTP}
+      onSubmit={CreateUser}
       method="POST"
       className="flex flex-col gap-5 w-full   "
     >
+      <div>
+        <h2 className="text-xl font-semibold">Farmer Registration</h2>
+      </div>{" "}
       <div className="border flex gap-5 items-center  rounded-md  w-full border-gray-200 ">
         <i className="uil uil-user bg-gray-100 px-4 py-3" />
         <div className="flex w-full gap-2 items-center">
@@ -82,7 +63,6 @@ const Registration = ({ setisLoginState }) => {
           />
         </div>
       </div>
-
       <div className="border flex gap-5 items-center  rounded-md  border-gray-200 ">
         <i className=" bg-gray-100 px-4 py-3">@</i>
         <input
@@ -105,7 +85,6 @@ const Registration = ({ setisLoginState }) => {
           className=" w-[100%] outline-none "
         />
       </div>
-
       <div className=" flex gap-5 items-center  ">
         <div className="rounded-md flex border gap-5 border-gray-200  w-full">
           <i className="    bg-gray-100 px-4 py-3 uil uil-phone "></i>
@@ -136,56 +115,23 @@ const Registration = ({ setisLoginState }) => {
           />
         </div>{" "}
       </div>
-
-      {otpSend && (
-        <>
-          <div className="border flex gap-5 w-full items-center  rounded-md  border-gray-200 ">
-            <i className=" bg-gray-100 uil uil-lock px-4 py-3" />
-            <input
-              type="number"
-              onChange={(e) => {
-                setuserOTP(e.target.value);
-              }}
-              className="p-2 w-full   bg-transparent text-sm outline-none py-3 "
-              required={true}
-              placeholder="Enter OTP"
-            />
-          </div>
-          <div className="w-full">
-            <button
-              onClick={async () => {
-                await resendOTP(phoneNo);
-              }}
-              disabled={isTimerRunning ? true : false}
-              className="pColor font-semibold float-right"
-            >
-              Reset OTP in : {timer}s
-            </button>
-          </div>
-          <PrimaryButton
-            style=" px-5 py-3  w-full rounded-md pBtn"
-            name="Continue"
-            loading={loading}
-          />
-        </>
-      )}
+      <PrimaryButton
+        style=" px-5 py-3  w-full rounded-md pBtn"
+        name="Continue"
+        loading={loading}
+      />
       <div className="flex  justify-center gap-3 text-gray-500  items-center">
         <p>
           By clicking on Login, I accept the <b>Terms & Conditions</b> &{" "}
           <b>Privacy Policy</b>{" "}
         </p>
       </div>
-
-      {!otpSend && (
-        <PrimaryButton style="px-5 py-3" loading={loading} name="Send OTP" />
-      )}
-
       <div className="text-center text-gray-500">
         If you have an account ?{" "}
         <button
           className="text-blue-800 font-semibold"
           onClick={() => {
-            setisLoginState(true);
+            router.push("/Authentication/SignIn");
           }}
         >
           Sign In
@@ -195,4 +141,4 @@ const Registration = ({ setisLoginState }) => {
   );
 };
 
-export default Registration;
+export default FarmerRegistration;
