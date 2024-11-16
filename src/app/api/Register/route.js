@@ -15,6 +15,13 @@ export async function POST(request) {
     const hashPassword = await bcrypt.hash(password, saltRounds);
     console.log(Data);
 
+    const checkPhoneExists = await User.find({ phoneNo });
+    const checkEmailExists = await User.find({ email: userData.email });
+
+    if (checkEmailExists || checkPhoneExists) {
+      throw new Error("Already Exists!");
+    }
+
     const userAdd = await User.create({
       image:
         userData.gender === "male"
